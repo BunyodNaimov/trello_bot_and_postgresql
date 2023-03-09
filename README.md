@@ -84,10 +84,10 @@ connection = psycopg2.connect(
 
 
 ![image](https://user-images.githubusercontent.com/122611882/224088709-58768aa8-c407-4915-aaff-61b5b34a5e2b.png)
-
+#
 
 ![image](https://user-images.githubusercontent.com/122611882/224088755-5fb9a4ac-c92e-46bf-bc95-be7153c2429e.png)
-
+#
 
 ![image](https://user-images.githubusercontent.com/122611882/224088796-c16ab870-0ea4-4052-ae0c-edca92aefcc4.png)
-
+#
