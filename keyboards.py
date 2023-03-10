@@ -60,6 +60,8 @@ def get_inline_lists_btn(board_id, action):
 
 def get_cards_btn(list_id):
     data = get_cards(list_id)
+    if not data:
+        return 'Task topilmadi!'
     msg = ''
     for i in data:
         msg += f"<a href=\"{i.get('url')}\">{i.get('name')}</a>\n"

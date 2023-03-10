@@ -2,9 +2,15 @@ import telebot
 
 from environs import Env
 
-from database import check_chat_id_from_database, \
-    write_trello_to_database, check_size, update_database
-from keyboards import get_inline_boards_btn, get_inline_lists_btn, get_cards_btn
+from database import (
+    check_chat_id_from_database,
+    write_trello_to_database,
+    check_size, update_database
+)
+from keyboards import (
+    get_inline_boards_btn,
+    get_inline_lists_btn,
+    get_cards_btn)
 from utils import get_fullname
 
 env = Env()
