@@ -1,13 +1,16 @@
+from psycopg2.extras import RealDictCursor
 from telebot.types import (
     InlineKeyboardMarkup,
     InlineKeyboardButton)
 
-from database import get_boards, get_lists, get_cards
+from db import connection, queries
 
 
-def get_inline_boards_btn(action):
+def get_inline_boards_btn(user_id, action):
     inline_boards_btn = InlineKeyboardMarkup()
-    boards = get_boards()
+    with connection.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(queries.GET_USER_BOARDS, (user_id,))
+        boards = cur.fetchall()
     if len(boards) % 2 == 0:
         last_board = None
     else:
@@ -15,15 +18,15 @@ def get_inline_boards_btn(action):
     for i in range(0, len(boards) - 1, 2):
         inline_boards_btn.add(
             InlineKeyboardButton(
-                boards[i].get("name"), callback_data=f"{action}_{boards[i].get('id')}"
+                boards[i].get("name"), callback_data=f"{action}_{boards[i].get('board_id')}"
             ),
             InlineKeyboardButton(
-                boards[i + 1].get("name"), callback_data=f"{action}_{boards[i + 1].get('id')}"
+                boards[i + 1].get("name"), callback_data=f"{action}_{boards[i + 1].get('board_id')}"
             ),
         )
     if last_board:
         inline_boards_btn.add(
-            InlineKeyboardButton(last_board.get("name"), callback_data=f"{action}_{last_board.get('id')}")
+            InlineKeyboardButton(last_board.get("name"), callback_data=f"{action}_{last_board.get('board_id')}")
         )
     return inline_boards_btn
 
@@ -58,11 +61,3 @@ def get_inline_lists_btn(board_id, action):
     return lists_inline_btn
 
 
-def get_cards_btn(list_id):
-    data = get_cards(list_id)
-    if not data:
-        return 'Task topilmadi!'
-    msg = ''
-    for i in data:
-        msg += f"<a href=\"{i.get('url')}\">{i.get('name')}</a>\n"
-    return msg

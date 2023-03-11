@@ -1,19 +1,6 @@
-import psycopg2
 from psycopg2.extras import RealDictCursor
-from environs import Env
 from trello import TrelloManager
-
-env = Env()
-env.read_env()
-connection = psycopg2.connect(
-    dbname=env('dbname'),
-    user=env('user'),
-    password=env('password'),
-    host=env('host'),
-    port=env('port')
-)
-
-cursor = connection.cursor()
+from db.conf import connection
 
 
 def check_chat_id_from_database(chat_id):

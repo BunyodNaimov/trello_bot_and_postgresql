@@ -26,7 +26,7 @@ class TrelloManager:
             "token": self.TOKEN
         }
 
-    def get_member(self):
+    def get_member_id(self):
         url = f"https://api.trello.com/1/members/{self.username}"
 
         response = requests.request(
@@ -36,7 +36,7 @@ class TrelloManager:
             params=self.credentials()
         )
         if response.status_code == 200:
-            return json.loads(response.text)
+            return json.loads(response.text).get('id')
 
     def get_boards(self):
         url = f"https://api.trello.com/1/members/{self.username}/boards"
