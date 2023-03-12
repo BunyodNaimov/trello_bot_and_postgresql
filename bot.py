@@ -73,7 +73,6 @@ def sending_tasks_handler(message):
         cur.execute(queries.GET_USER_BY_CHAT_ID, (message.chat.id,))
         user = cur.fetchone()
         trello_username = user.get('trello_username')
-        print(trello_username)
     if trello_username:
         bot.send_message(
             message.chat.id, messages.SELECT_BOARD,
@@ -87,7 +86,7 @@ def sending_tasks_handler(message):
 def get_user_tasks_handler(call):
     message = call.message
     chay_id = message.chat.id
-    board_id = call.data.split('tasks_board')
+    board_id = call.data.split('_')[2]
     with connection.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(queries.GET_USER_BY_CHAT_ID, (chay_id,))
         user = cur.fetchone()

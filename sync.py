@@ -26,13 +26,10 @@ def sync_boards(trello_username):
 def sync_board_users(board_member_id, board_id):
     with connection.cursor(cursor_factory=RealDictCursor) as cur:
         for member_id in board_member_id:
-            print(member_id)
             cur.execute(queries.GET_USER_BY_TRELLO_ID, (member_id,))
             user = cur.fetchone()
             if user:
-                print(user)
-                print(user.get('id'))
-                cur.execute(queries.UPSERT_BOARD_USERS), (board_id, user.get("id"))
+                cur.execute(queries.UPSERT_BOARD_USERS, (board_id, user.get("id")))
                 connection.commit()
 
 

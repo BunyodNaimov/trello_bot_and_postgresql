@@ -17,8 +17,7 @@ GET_USER_BY_TRELLO_ID = """
 
 # Boards
 UPSERT_BOARDS = """
-    insert into boards(name, trello_id)
-    values ( %s, %s)
+    insert into boards(name, trello_id) values (%s, %s)
     on conflict(trello_id)
     do update set name=excluded.name
 """
@@ -55,6 +54,8 @@ GET_LIST_BY_TRELLO_ID = """
 UPSERT_CARDS = """
     insert into cards(name, trello_id, url, description, list_id)
     values (%s,%s,%s,%s,%s)
+    on conflict (trello_id)
+    do update set name=excluded.name, url=excluded.url, description=excluded.description, list_id=excluded.list_id
 """
 
 GET_CARD_ID_BY_TRELLO_ID = """
