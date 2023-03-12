@@ -2,62 +2,75 @@
 
 # table lar yaratish
 ```sql
-create table boards(
-    id bigserial primary key,
-    name varchar(500) not null,
-    board_trello_id varchar(50) unique not null
+CREATE TABLE boards
+(
+    id        SERIAL PRIMARY KEY,
+    name      varchar(255)       not null,
+    trello_id varchar(64) UNIQUE NOT NULL
 );
 
-create table lists(
-    id bigserial primary key,
-    name varchar (500) not null,
-    list_trello_id varchar(50) unique not null,
-    board_id integer references boards(id)
+CREATE TABLE lists
+(
+    id        SERIAL PRIMARY KEY,
+    name      varchar(255)       not null,
+    trello_id varchar(64) UNIQUE NOT NULL,
+    board_id  int REFERENCES boards (id)
 );
-create table cards(
-    id bigserial primary key,
-    name varchar(500) not null,
-    card_trello_id varchar(50) unique not null,
-    url varchar(500) not null,
-    Description text,
-    lists_id integer references lists(id)
+
+CREATE TABLE cards
+(
+    id          SERIAL PRIMARY KEY,
+    name        varchar            NOT NULL,
+    trello_id   varchar(64) UNIQUE NOT NULL,
+    url         varchar(255),
+    description text,
+    list_id     int REFERENCES lists (id)
 );
-create table members(
-    id bigserial primary key,
-    fullname varchar(100) not null,
-    trello_username varchar(100) unique not null,
-    member_trello_id varchar(50) unique not null
+
+CREATE TABLE users
+(
+    id              serial PRIMARY KEY,
+    chat_id         bigint UNIQUE NOT NULL,
+    first_name       varchar(255),
+    last_name       varchar(255),
+    username        varchar(255),
+    trello_username varchar(255) UNIQUE,
+    trello_id       varchar(64) UNIQUE
 );
-create table cards_members(
-    id serial,
-    card_id integer references cards(id),
-    member_id integer references members(id),
-    primary key (card_id, member_id)
+
+CREATE TABLE boards_users
+(
+    id       serial,
+    board_id int REFERENCES boards (id),
+    user_id  int REFERENCES users (id),
+    primary key (board_id, user_id)
 );
-create table board_members(
-    id serial,
-    board_id integer references boards(id) unique not null ,
-    member_id integer references members(id)
+
+CREATE TABLE cards_users
+(
+    id      serial,
+    card_id int references cards (id),
+    user_id int references users (id),
+    primary key (card_id, user_id)
 );
-create table labels(
-    id bigserial primary key,
-    name varchar check ( name > '0' ),
-    label_trello_id varchar not null unique,
-    board_id integer references boards(id)
+
+CREATE TABLE labels
+(
+    id        SERIAL primary key,
+    name      varchar(255)       NOT NULL,
+    color     varchar(100),
+    trello_id varchar(64) UNIQUE NOT NULL,
+    board_id  int references boards (id)
 );
-create table cards_labels(
-    id serial,
-    card_id integer references cards(id),
-    labels_id integer references labels(id),
-    primary key (card_id, labels_id)
+
+CREATE TABLE cards_labels
+(
+    id       serial,
+    card_id  int references cards (id),
+    label_id int references labels (id),
+    primary key (card_id, label_id)
 );
-create table users(
-    id bigserial primary key,
-    chat_id bigint not null unique,
-    fullname varchar(100),
-    username varchar(100) not null unique,
-    member_id integer references members(id)
-);
+
 ```
 ![image](https://user-images.githubusercontent.com/122611882/224089219-e32d46c3-2596-4194-83e9-a1852ddadae2.png)
 
